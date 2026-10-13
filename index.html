@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sitzplan · Dein Klassenraum</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#"><span class="brand-mark">S</span><span>Sitzplan</span></a>
+        <nav aria-label="Hauptmenü">
+          <button class="nav-item active" data-view="plan"><span>▦</span>Sitzplan</button>
+          <button class="nav-item" data-view="students"><span>♙</span>Schüler:innen</button>
+          <button class="nav-item" data-view="rooms"><span>⌂</span>Räume</button>
+        </nav>
+        <div class="sidebar-bottom"><button class="nav-item" data-action="help"><span>?</span>Hilfe</button><div class="teacher"><span class="avatar">ER</span><span><strong>Frau Ranft</strong><small>Lehrkraft</small></span></div></div>
+      </aside>
+      <main>
+        <header class="topbar">
+          <div><p class="eyebrow">KLASSENRAUM</p><h1 id="room-title">Klasse 5A</h1></div>
+          <div class="header-actions"><button class="button ghost" data-action="print">⌘ Drucken</button><button class="button ghost" data-action="share">⌁ Teilen</button><button class="button primary" data-action="generate">✦ Automatisch verteilen</button></div>
+        </header>
+        <section id="plan-view" class="view active">
+          <div class="notice"><span>✦</span><span><strong>Alles bereit.</strong> Ziehe Tische an die gewünschte Stelle oder verteile deine Klasse automatisch.</span><button data-action="dismiss">×</button></div>
+          <div class="workspace">
+            <section class="room-card">
+              <div class="room-toolbar"><span class="pill">▦ Raumansicht</span><button class="icon-button" data-action="rename" title="Raum umbenennen">✎</button></div>
+              <div id="room" class="room" aria-label="Klassenraum"><div class="board">TAFEL</div><div class="teacher-desk">Lehrerpult</div></div>
+              <p class="room-footnote">Tipp: Tische lassen sich per Drag-and-drop bewegen.</p>
+            </section>
+            <aside class="tool-card">
+              <h2>Raum gestalten</h2><p>Füge Sitzplätze hinzu und ordne sie an.</p>
+              <div class="tool-list"><button class="tool" data-desk="single"><b>▣</b><span>Einzeltisch<small>1 Platz</small></span><i>+</i></button><button class="tool" data-desk="double"><b>▤</b><span>Doppeltisch<small>2 Plätze</small></span><i>+</i></button><button class="tool" data-desk="teacher"><b>▰</b><span>Lehrerpult<small>ohne Platz</small></span><i>+</i></button></div>
+              <hr /><div class="stat-row"><span>Belegte Plätze</span><strong id="seat-stat">0 / 0</strong></div><div class="progress"><span id="progress"></span></div>
+              <button class="button secondary full" data-action="clear">↺ Sitzordnung leeren</button>
+            </aside>
+          </div>
+          <section class="bottom-grid"><div class="panel"><div class="panel-heading"><div><h2>Schüler:innen</h2><p id="student-summary">Noch keine Schüler:innen hinzugefügt</p></div><button class="text-button" data-view-target="students">Verwalten →</button></div><div id="student-chips" class="student-chips"></div></div><div class="panel generator"><div><p class="eyebrow">SITZORDNUNG</p><h2>Neue Verteilung erstellen</h2><p>Berücksichtige Sitzwünsche und verteile zufällig.</p></div><button class="button primary" data-action="generate">Jetzt erstellen</button></div></section>
+        </section>
+        <section id="students-view" class="view">
+          <div class="content-head"><div><p class="eyebrow">KLASSE 5A</p><h1>Schüler:innen</h1><p>Lege deine Klasse an und ergänze Sitzwünsche.</p></div><button class="button primary" data-action="add-student">+ Schüler:in hinzufügen</button></div><div class="students-layout"><section class="panel"><div id="students-list" class="students-list"></div></section><aside class="info-card"><span class="big-icon">♙</span><h2>Datenschutz</h2><p>Die Daten bleiben in diesem Browser gespeichert. Bei einem späteren Backend werden sie sicher in deiner Datenbank abgelegt.</p></aside></div>
+        </section>
+        <section id="rooms-view" class="view"><div class="content-head"><div><p class="eyebrow">RAUMVERWALTUNG</p><h1>Deine Räume</h1><p>Ein Raumaufbau kann für viele Sitzpläne verwendet werden.</p></div><button class="button primary" data-action="new-room">+ Raum erstellen</button></div><section class="room-list"><article class="room-list-item"><span class="room-icon">⌂</span><div><h2 id="room-list-name">Klasse 5A</h2><p id="room-list-meta">0 Plätze · zuletzt bearbeitet: heute</p></div><button class="button ghost" data-view-target="plan">Öffnen</button></article></section></section>
+      </main>
+    </div>
+    <dialog id="student-dialog"><form method="dialog" class="modal"><button class="close" value="cancel">×</button><p class="eyebrow">NEUE SCHÜLER:IN</p><h2>Schüler:in hinzufügen</h2><label>Vorname<input id="first-name" required placeholder="z. B. Lena" /></label><label>Nachname <span class="optional">(optional)</span><input id="last-name" placeholder="z. B. Müller" /></label><label>Geschlecht<select id="gender"><option value="divers">divers</option><option value="weiblich">weiblich</option><option value="männlich">männlich</option></select></label><label>Sitzwunsch<select id="preference"><option value="none">Kein Wunsch</option><option value="front">Bevorzugt vorne</option><option value="back">Bevorzugt hinten</option></select></label><menu><button class="button ghost" value="cancel">Abbrechen</button><button class="button primary" id="save-student" value="default">Speichern</button></menu></form></dialog>
+    <dialog id="share-dialog"><div class="modal share-modal"><button class="close" data-action="close-share">×</button><p class="eyebrow">SITZPLAN TEILEN</p><h2>Aktuellen Plan öffnen</h2><div class="qr" aria-label="QR-Code Platzhalter"><span>▦</span></div><p>Dieser Link zeigt immer die aktuelle Sitzordnung.</p><div class="copy-row"><input id="share-link" readonly /><button class="button primary" data-action="copy">Kopieren</button></div><small>In der finalen Version wird hier ein echter QR-Code erzeugt.</small></div></dialog>
+    <div id="toast" role="status"></div><script src="config.js"></script><script src="app.js"></script>
+  </body>
+</html>
